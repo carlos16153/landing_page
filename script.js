@@ -13,10 +13,15 @@ const entryGate = document.querySelector('#entry-gate');
 const enterButton = document.querySelector('#enter-button');
 const stayButton = document.querySelector('#stay-button');
 const entryResponse = document.querySelector('#entry-response');
+const duelAudio = document.querySelector('#duel-audio');
 
 document.body.classList.add('entry-locked');
 
 enterButton.addEventListener('click', () => {
+  duelAudio.currentTime = 0;
+  duelAudio.play().catch(() => {
+    entryResponse.textContent = 'No se pudo reproducir el audio local.';
+  });
   entryGate.classList.add('opening');
   enterButton.disabled = true;
   stayButton.disabled = true;
