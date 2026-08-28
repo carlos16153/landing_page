@@ -9,6 +9,27 @@ const modalStats = document.querySelector('#modal-stats');
 const modalRequirement = document.querySelector('#modal-requirement');
 const modalExample = document.querySelector('#modal-example');
 const modalClose = document.querySelector('#modal-close');
+const entryGate = document.querySelector('#entry-gate');
+const enterButton = document.querySelector('#enter-button');
+const stayButton = document.querySelector('#stay-button');
+const entryResponse = document.querySelector('#entry-response');
+
+document.body.classList.add('entry-locked');
+
+enterButton.addEventListener('click', () => {
+  entryGate.classList.add('opening');
+  enterButton.disabled = true;
+  stayButton.disabled = true;
+  window.setTimeout(() => {
+    entryGate.classList.add('entered');
+    document.body.classList.remove('entry-locked');
+  }, 1250);
+  window.setTimeout(() => entryGate.remove(), 1750);
+});
+
+stayButton.addEventListener('click', () => {
+  entryResponse.textContent = 'El duelo te esperará en la arena.';
+});
 
 scrollButtons.forEach((button) => {
   button.addEventListener('click', () => {
