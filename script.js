@@ -14,6 +14,7 @@ const enterButton = document.querySelector('#enter-button');
 const stayButton = document.querySelector('#stay-button');
 const entryResponse = document.querySelector('#entry-response');
 const duelAudio = document.querySelector('#duel-audio');
+const accordionItems = document.querySelectorAll('.accordion-item');
 
 document.body.classList.add('entry-locked');
 
@@ -34,6 +35,23 @@ enterButton.addEventListener('click', () => {
 
 stayButton.addEventListener('click', () => {
   entryResponse.textContent = 'El duelo te esperará en la arena.';
+});
+
+accordionItems.forEach((item) => {
+  const trigger = item.querySelector('.accordion-trigger');
+  const panel = item.querySelector('.accordion-panel');
+
+  trigger.addEventListener('click', () => {
+    const shouldOpen = trigger.getAttribute('aria-expanded') !== 'true';
+
+    accordionItems.forEach((otherItem) => {
+      const otherTrigger = otherItem.querySelector('.accordion-trigger');
+      const otherPanel = otherItem.querySelector('.accordion-panel');
+      otherItem.classList.toggle('is-open', otherItem === item && shouldOpen);
+      otherTrigger.setAttribute('aria-expanded', otherItem === item && shouldOpen ? 'true' : 'false');
+      otherPanel.hidden = !(otherItem === item && shouldOpen);
+    });
+  });
 });
 
 scrollButtons.forEach((button) => {
