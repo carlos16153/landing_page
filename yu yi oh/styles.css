@@ -17,6 +17,7 @@
 .hero-stage{overflow:hidden}
 .toast{background:var(--red);color:var(--paper)}
 .voice-command{border:1px solid var(--acid);background:transparent;color:var(--acid);padding:10px 12px;margin-left:auto;margin-right:14px;font:700 10px var(--mono);letter-spacing:1px}.voice-command:hover,.voice-command.is-listening{background:var(--acid);color:var(--ink)}.voice-command:disabled{cursor:not-allowed;opacity:.45}@media(max-width:720px){.voice-command{padding:9px 8px;margin-right:8px}.main-nav{display:none}}
+.envelope-body span,.envelope-letter{color:#6b4c2b}.card-back-inner{color:#f2d59a}.exodia-interface{color:#6b4c2b}.exodia-intro h2,.exodia-piece h3{color:#6b4c2b}.exodia-intro>p:last-child{color:#7a5a38}.exodia-piece p{color:#85653f}
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap');
 
 :root{--ink:#31a1a1;--paper:#16111d;--acid:#d7f542;--red:#ed4c3d;--muted:#96978d;--line:rgba(232,229,220,.18);--display:'Bebas Neue',Impact,sans-serif;--body:'DM Sans',sans-serif;--mono:'Space Mono',monospace}
