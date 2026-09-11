@@ -9,6 +9,34 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    @media (max-width: 720px) {
+      html, body { width: 100%; overflow-x: hidden; }
+      .site-header { position: fixed !important; inset: 0 0 auto; height: 112px; min-height: 112px; padding: 10px 14px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+      .brand { min-width: 0; }
+      .nav-cta { position: static; margin: 0; padding: 9px 8px; font-size: 8px; white-space: nowrap; }
+      .yu-gi-oh-logo { position: static; grid-column: 1 / -1; grid-row: 2; justify-self: center; transform: skew(-8deg); font-size: 24px; }
+      .voice-command { right: 10px; bottom: max(0px, env(safe-area-inset-bottom)); width: 52px; height: 52px; }
+      .hero { width: 100%; padding: 155px 20px 60px; display: block; text-align: center; }
+      .hero-intro { width: min(100%, 330px); margin-left: auto; margin-right: auto; }
+      .hero-stage { width: 100%; min-height: 280px; margin-top: 30px; transform: none; }
+      .orbit-one { width: 90vw; max-width: 340px; }
+      .orbit-two { width: 78vw; max-width: 300px; }
+      .section-grid, .card-types, .exodia-interface, .events, .calendar-aside, .info-panel, .social-strip { width: 100%; padding-left: 20px; padding-right: 20px; }
+      .section-grid, .card-types, .exodia-interface { display: block; }
+      .section-heading, .card-types-heading, .exodia-intro { text-align: center; }
+      .deck-row { grid-template-columns: 22px minmax(0, 1fr) 44px 14px; gap: 6px; min-width: 0; }
+      .deck-row h3, .exodia-piece h3 { font-size: 19px; overflow-wrap: anywhere; }
+      .deck-row p { white-space: normal; overflow-wrap: anywhere; }
+      .exodia-board, .calendar-list, .info-grid { width: 100%; max-width: 100%; }
+      .exodia-piece, .exodia-piece.exodia-head { grid-template-columns: 20px 44px minmax(0, 1fr); min-width: 0; }
+      .events { display: block; text-align: center; }
+      .event-card { width: 100%; max-width: 320px; margin: 35px auto 0; }
+      .info-grid { display: block; }
+      .info-card { width: 100%; margin-bottom: 14px; }
+      footer { width: 100%; padding: 24px 20px; text-align: center; }
+    }
+  </style>
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
