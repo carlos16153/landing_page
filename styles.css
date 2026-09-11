@@ -18,6 +18,60 @@
 .toast{background:var(--red);color:var(--paper)}
 .voice-command{border:1px solid var(--acid);background:transparent;color:var(--acid);padding:10px 12px;margin-left:auto;margin-right:14px;font:700 10px var(--mono);letter-spacing:1px}.voice-command:hover,.voice-command.is-listening{background:var(--acid);color:var(--ink)}.voice-command:disabled{cursor:not-allowed;opacity:.45}@media(max-width:720px){.voice-command{padding:9px 8px;margin-right:8px}.main-nav{display:none}}
 .envelope-body span,.envelope-letter{color:#6b4c2b}.card-back-inner{color:#f2d59a}.exodia-interface{color:#6b4c2b}.exodia-intro h2,.exodia-piece h3{color:#6b4c2b}.exodia-intro>p:last-child{color:#7a5a38}.exodia-piece p{color:#85653f}
+@media(max-width:720px){
+	.site-header{height:116px;min-height:116px;padding:12px 16px;display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center}
+	.brand{font-size:11px;line-height:10px;gap:6px}
+	.brand-mark{font-size:30px}
+	.yu-gi-oh-logo{position:static;grid-column:1/-1;grid-row:2;transform:skew(-8deg);font-size:25px;line-height:.75;justify-self:center;align-self:end}
+	.yu-gi-oh-logo small{font-size:5px;margin-top:5px}
+	.voice-command{margin:0;padding:9px 8px}
+	.nav-cta{padding:10px 9px;font-size:9px;white-space:nowrap}
+	.nav-cta span{margin-left:5px}
+	.hero{min-height:0;padding:165px 8vw 70px;display:block;text-align:center}
+	.hero-copy{display:flex;flex-direction:column;align-items:center}
+	.hero-copy .eyebrow{justify-content:center;line-height:1.5}
+	.hero h1{font-size:clamp(68px,19vw,100px);margin:26px 0 32px}
+	.hero-intro{max-width:330px;margin:0 auto 25px}
+	.hero-actions{justify-content:center;flex-wrap:wrap;gap:18px}
+	.hero-stage{min-height:330px;margin-top:26px;width:100%}
+	.orbit-one{width:min(88vw,360px);height:160px}
+	.orbit-two{width:min(78vw,320px);height:130px}
+	.stage-note{right:0;bottom:12px;font-size:8px}
+	.stage-note span{font-size:6px}
+	.power-line{left:0;bottom:12px;width:100px}
+	.hero-side-label{display:none}
+	.section-grid,.card-types,.exodia-interface{display:block;padding:82px 8vw}
+	.section-heading,.card-types-heading,.exodia-intro{max-width:100%;text-align:center}
+	.section-heading .eyebrow,.card-types-heading .eyebrow,.exodia-intro .eyebrow{justify-content:center}
+	.section-heading h2,.card-types-heading h2,.exodia-intro h2{font-size:clamp(62px,18vw,88px);margin:25px 0 42px}
+	.arsenal-content{width:100%}
+	.section-lead{max-width:320px;margin:0 auto 28px;text-align:center}
+	.deck-row{grid-template-columns:24px minmax(0,1fr) 48px 18px;gap:8px;padding:12px 0}
+	.deck-row h3{font-size:22px;line-height:.95}
+	.deck-row p{font-size:7px;line-height:1.35}
+	.deck-row img{width:48px;height:68px}
+	.card-types .accordion{width:100%}
+	.accordion-trigger{font-size:21px;padding:20px 0}
+	.accordion-panel{padding:0 0 24px;grid-template-columns:54px minmax(0,1fr);font-size:12px}
+	.exodia-board{margin-top:42px;width:100%;padding:12px}
+	.exodia-card-grid{grid-template-columns:1fr}
+	.exodia-piece,.exodia-piece.exodia-head{grid-template-columns:22px 48px minmax(0,1fr);height:96px;margin-bottom:8px}
+	.exodia-piece img{width:48px;height:68px}
+	.exodia-piece h3{font-size:20px}
+	.events,.calendar-aside,.info-panel,.social-strip{padding-left:8vw;padding-right:8vw}
+	.events{display:block;text-align:center}
+	.events>div:first-child{margin-bottom:38px}
+	.event-card{margin:0 auto;max-width:320px}
+	.calendar-header,.info-heading{text-align:center}
+	.calendar-list,.info-grid{width:100%}
+	.calendar-item{grid-template-columns:58px minmax(0,1fr);gap:12px}
+	.calendar-button{grid-column:1/-1;width:100%}
+	.info-grid{display:block}
+	.info-card{margin-bottom:14px}
+	.social-strip{text-align:center}
+	.social-links{justify-content:center;flex-wrap:wrap;gap:18px}
+	footer{padding:28px 8vw;text-align:center;display:grid;gap:10px}
+}
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap');
 
 :root{--ink:#31a1a1;--paper:#16111d;--acid:#d7f542;--red:#ed4c3d;--muted:#96978d;--line:rgba(232,229,220,.18);--display:'Bebas Neue',Impact,sans-serif;--body:'DM Sans',sans-serif;--mono:'Space Mono',monospace}
