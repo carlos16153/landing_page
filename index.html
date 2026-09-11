@@ -36,6 +36,22 @@
       .info-card { width: 100%; margin-bottom: 14px; }
       footer { width: 100%; padding: 24px 20px; text-align: center; }
     }
+    @media (max-width: 420px) {
+      .site-header { height: 104px; min-height: 104px; padding-inline: 10px; }
+      .brand { font-size: 9px; }
+      .brand-mark { font-size: 26px; }
+      .nav-cta { max-width: 128px; overflow: hidden; text-overflow: ellipsis; }
+      .yu-gi-oh-logo { font-size: 21px; }
+      .hero { padding-top: 145px; padding-inline: 14px; }
+      .hero h1 { font-size: clamp(58px, 18vw, 78px); }
+      .hero-actions { gap: 12px; }
+      .primary-button { padding-inline: 12px; }
+      .deck-row { grid-template-columns: 18px minmax(0, 1fr) 38px 12px; gap: 4px; }
+      .deck-row img { width: 38px; height: 56px; }
+      .deck-row h3, .exodia-piece h3 { font-size: 17px; }
+      .exodia-piece, .exodia-piece.exodia-head { grid-template-columns: 18px 38px minmax(0, 1fr); }
+      .exodia-piece img { width: 38px; height: 56px; }
+    }
   </style>
 </head>
 <body>

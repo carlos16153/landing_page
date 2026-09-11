@@ -114,11 +114,13 @@ if (voiceCommand) {
     voiceCommand.setAttribute('aria-label', 'Comandos de voz no disponibles');
   } else {
     const recognition = new SpeechRecognition();
+    let isRecognizing = false;
     recognition.lang = 'es-ES';
     recognition.interimResults = false;
     recognition.continuous = false;
 
     recognition.onstart = () => {
+      isRecognizing = true;
       voiceCommand.classList.add('is-listening');
       voiceCommand.textContent = '...';
       showVoiceMessage('Escuchando un comando.');
@@ -129,12 +131,23 @@ if (voiceCommand) {
       runVoiceCommand(command);
     };
 
-    recognition.onerror = () => showVoiceMessage('No se pudo reconocer el comando de voz.');
+    recognition.onerror = () => {
+      isRecognizing = false;
+      showVoiceMessage('No se pudo reconocer el comando de voz.');
+    };
     recognition.onend = () => {
+      isRecognizing = false;
       voiceCommand.classList.remove('is-listening');
       voiceCommand.textContent = 'MIC';
     };
-    voiceCommand.addEventListener('click', () => recognition.start());
+    voiceCommand.addEventListener('click', () => {
+      if (isRecognizing) return;
+      try {
+        recognition.start();
+      } catch {
+        showVoiceMessage('El micrófono ya está activo.');
+      }
+    });
   }
 }
 
