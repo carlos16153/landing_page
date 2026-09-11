@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Card</title>
+    <style>
+      :root {
+        --bg: #07141f;
+        --panel: rgba(14, 28, 39, 0.9);
+        --panel-border: rgba(148, 163, 184, 0.18);
+        --primary: #38bdf8;
+        --secondary: #7c3aed;
+        --text: #e2e8f0;
+        --muted: #a5b4c9;
+        --success: #34d399;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: Arial, Helvetica, sans-serif;
+        background: radial-gradient(circle at top, #102a3a 0%, var(--bg) 55%, #020b12 100%);
+        color: var(--text);
+      }
+
+      .weather-card {
+        position: relative;
+        width: min(92vw, 380px);
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 18px 40px rgba(2, 8, 20, 0.7);
+      }
+
+      .weather-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(56, 189, 248, 0.14), rgba(124, 58, 237, 0.12));
+        pointer-events: none;
+      }
+
+      .content {
+        position: relative;
+        z-index: 1;
+        padding: 18px 18px 16px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+      }
+
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: rgba(52, 211, 153, 0.12);
+        color: var(--success);
+        border: 1px solid rgba(52, 211, 153, 0.22);
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 12px rgba(52, 211, 153, 0.9);
+      }
+
+      .city-tag {
+        font-size: 11px;
+        color: var(--muted);
+        background: rgba(148, 163, 184, 0.08);
+        border: 1px solid rgba(148, 163, 184, 0.15);
+        border-radius: 999px;
+        padding: 6px 10px;
+      }
+
+      .main-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 16px;
+      }
+
+      .temp-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .weather-icon {
+        width: 68px;
+        height: 68px;
+        object-fit: contain;
+        filter: drop-shadow(0 8px 18px rgba(56, 189, 248, 0.4));
+      }
+
+      .temperature {
+        font-size: 2.7rem;
+        font-weight: 800;
+        letter-spacing: -0.06em;
+        line-height: 1;
+      }
+
+      .unit {
+        font-size: 1.1rem;
+        color: var(--muted);
+        margin-left: 4px;
+      }
+
+      .condition {
+        margin: 4px 0 0;
+        font-size: 0.95rem;
+        color: var(--muted);
+        text-transform: capitalize;
+      }
+
+      .meta {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .meta-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-height: 82px;
+        padding: 12px 8px;
+        border-radius: 12px;
+        background: rgba(148, 163, 184, 0.06);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        color: var(--muted);
+        font-size: 0.72rem;
+        text-align: center;
+      }
+
+      .meta-item strong {
+        color: var(--text);
+        font-weight: 700;
+        font-size: 1rem;
+      }
+
+      .hours-section {
+        background: rgba(148, 163, 184, 0.04);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        border-radius: 14px;
+        padding: 12px;
+      }
+
+      .hours-title {
+        margin: 0 0 12px 0;
+        font-size: 0.75rem;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .hours-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .hour-card {
+        background: rgba(148, 163, 184, 0.06);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        border-radius: 12px;
+        padding: 10px 8px;
+        text-align: center;
+      }
+
+      .hour-time {
+        color: var(--muted);
+        font-size: 0.72rem;
+        margin-bottom: 6px;
+      }
+
+      .hour-card img {
+        width: 36px;
+        height: 36px;
+        object-fit: contain;
+      }
+
+      .hour-temp {
+        font-weight: 700;
+        font-size: 1rem;
+        margin-top: 4px;
+      }
+
+      .voice-box {
+        margin-top: 18px;
+        background: rgba(148, 163, 184, 0.04);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        border-radius: 14px;
+        padding: 12px;
+      }
+
+      .voice-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .voice-title {
+        font-size: 0.75rem;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin: 0;
+      }
+
+      .voice-btn {
+        border: none;
+        border-radius: 999px;
+        width: 54px;
+        height: 54px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 10px 20px rgba(56, 189, 248, 0.35);
+      }
+
+      .voice-output {
+        min-height: 74px;
+        border-radius: 12px;
+        background: rgba(15, 23, 42, 0.65);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        padding: 12px 14px;
+        color: var(--text);
+        line-height: 1.6;
+        font-size: 0.9rem;
+      }
+
+      .refresh-btn {
+        margin-top: 18px;
+        width: 100%;
+        border: none;
+        border-radius: 12px;
+        padding: 12px 14px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+      }
+
+      .refresh-btn:hover { transform: translateY(-1px); }
+
+      .refresh-btn:disabled {
+        opacity: 0.7;
+        cursor: wait;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="weather-card">
+      <div class="content">
+        <div class="topbar">
+          <span class="status"><span class="status-dot"></span> En vivo</span>
+          <span class="city-tag" id="cityTag">Cargando...</span>
+        </div>
+
+        <div class="main-row">
+          <div class="temp-wrap">
+            <img id="weatherIcon" class="weather-icon" src="https://openweathermap.org/img/wn/02d@2x.png" alt="icono del clima" />
+            <div>
+              <div class="temperature"><span id="temperature">--</span><span class="unit">°C</span></div>
+              <div class="condition" id="condition">cargando...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="meta">
+          <div class="meta-item"><span>Humedad</span><strong id="humidity">--</strong></div>
+          <div class="meta-item"><span>Viento</span><strong id="wind">--</strong></div>
+          <div class="meta-item"><span>Máxima</span><strong id="maxTemp">--</strong></div>
+        </div>
+
+        <div class="hours-section" style="margin-top: 18px;">
+          <p class="hours-title">Ahora y mañana</p>
+          <div class="hours-grid" id="hoursList"></div>
+        </div>
+
+        <button class="refresh-btn" id="refreshBtn" type="button">Actualizar clima</button>
+
+        <div class="voice-box">
+          <div class="voice-header">
+            <p class="voice-title">Habla</p>
+            <button class="voice-btn" id="voiceBtn" type="button">Escuchar</button>
+          </div>
+          <div class="voice-output" id="voiceOutput">Aquí aparecerán las palabras que digas.</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API_KEY = '309792feedb32cc954c62df370f8a045';
+      const DEFAULT_CITY = 'Bogota';
+
+      const cityTag = document.getElementById('cityTag');
+      const temperatureEl = document.getElementById('temperature');
+      const conditionEl = document.getElementById('condition');
+      const humidityEl = document.getElementById('humidity');
+      const windEl = document.getElementById('wind');
+      const maxTempEl = document.getElementById('maxTemp');
+      const weatherIcon = document.getElementById('weatherIcon');
+      const refreshBtn = document.getElementById('refreshBtn');
+      const hoursList = document.getElementById('hoursList');
+      const voiceBtn = document.getElementById('voiceBtn');
+      const voiceOutput = document.getElementById('voiceOutput');
+
+      function updateWeather(data) {
+        const temp = Math.round(data.main.temp);
+        const feelsLike = Math.round(data.main.feels_like);
+        const humidity = data.main.humidity;
+        const wind = Math.round(data.wind.speed * 3.6);
+        const max = Math.round(data.main.temp_max);
+
+        cityTag.textContent = data.name;
+        temperatureEl.textContent = temp;
+        conditionEl.textContent = `${data.weather[0].description} · Sensación ${feelsLike}°C`;
+        humidityEl.textContent = `${humidity}%`;
+        windEl.textContent = `${wind} km/h`;
+        maxTempEl.textContent = `${max}°C`;
+        weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+      }
+
+      function extractCityFromCommand(text) {
+        const cleaned = text.toLowerCase();
+
+        const patterns = [
+          /(?:ciudad|lugar|buscar|clima en|tiempo en|en)\s+([a-záéíóúñü\s]+)/i,
+          /(?:ciudad\s+es|lugar\s+es)\s+([a-záéíóúñü\s]+)/i,
+          /(?:actualiza|cambia|pon)\s+(?:la\s+)?(?:ciudad|lugar)\s+(?:a\s+)?([a-záéíóúñü\s]+)/i
+        ];
+
+        for (const pattern of patterns) {
+          const match = cleaned.match(pattern);
+          if (match && match[1]) {
+            const city = match[1].trim();
+            if (city && city !== 'de' && city !== 'la' && city !== 'el') {
+              return city.replace(/\s+/g, ' ');
+            }
+          }
+        }
+
+        return null;
+      }
+
+      function hablarTexto(texto) {
+        const textoLimpio = (texto || '').trim();
+
+        if (!textoLimpio || !('speechSynthesis' in window)) {
+          return false;
+        }
+
+        window.speechSynthesis.cancel();
+        const mensaje = new SpeechSynthesisUtterance(textoLimpio);
+        mensaje.lang = 'es-ES';
+        mensaje.rate = 1;
+        mensaje.pitch = 1;
+        window.speechSynthesis.speak(mensaje);
+        return true;
+      }
+
+      async function applyVoiceCommand(commandText) {
+        const text = commandText.trim();
+        if (!text) return;
+
+        const normalized = text.toLowerCase();
+        voiceOutput.textContent = `He oído: "${text}"`;
+
+        if (normalized.includes('actualizar clima') || normalized.includes('refrescar clima') || normalized.includes('actualiza el clima')) {
+          hablarTexto('Actualizando clima');
+          await loadWeather();
+          return;
+        }
+
+        const city = extractCityFromCommand(text);
+        if (city) {
+          voiceOutput.textContent = `Buscando clima en ${city}...`;
+          hablarTexto(`Buscando clima en ${city}`);
+          await fetchWeatherByCity(city);
+          return;
+        }
+
+        if (normalized.includes('mostrar palabras') || normalized.includes('qué dijiste') || normalized.includes('repite')) {
+          voiceOutput.textContent = `La última frase fue: "${text}"`;
+          hablarTexto(`La última frase fue ${text}`);
+          return;
+        }
+
+        voiceOutput.textContent = `Comando no reconocido: "${text}"`;
+        hablarTexto('Comando no reconocido');
+      }
+
+      function renderHours(dataList) {
+        const now = new Date();
+        const tomorrowStart = new Date(now);
+        tomorrowStart.setDate(now.getDate() + 1);
+        tomorrowStart.setHours(0, 0, 0, 0);
+
+        const nextHours = dataList.filter(item => {
+          const itemDate = new Date(item.dt * 1000);
+          return itemDate >= tomorrowStart && itemDate < new Date(tomorrowStart.getTime() + 12 * 60 * 60 * 1000);
+        }).slice(0, 6);
+
+        if (!nextHours.length) {
+          hoursList.innerHTML = '<div class="hour-card" style="grid-column: 1 / -1;">No hay datos para mañana aún.</div>';
+          return;
+        }
+
+        hoursList.innerHTML = nextHours.map(item => {
+          const dt = new Date(item.dt * 1000);
+          const hourLabel = dt.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+          const temp = Math.round(item.main.temp);
+          const icon = item.weather[0].icon;
+
+          return `
+            <div class="hour-card">
+              <div class="hour-time">${hourLabel}</div>
+              <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="${item.weather[0].description}" />
+              <div class="hour-temp">${temp}°</div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      async function fetchWeatherByCoords(lat, lon) {
+        const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${API_KEY}`;
+        const weatherResponse = await fetch(weatherUrl);
+        if (!weatherResponse.ok) throw new Error('No se pudo obtener el clima.');
+        const weatherData = await weatherResponse.json();
+
+        const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${API_KEY}`;
+        const forecastResponse = await fetch(forecastUrl);
+        if (!forecastResponse.ok) throw new Error('No se pudo obtener el pronóstico.');
+        const forecastData = await forecastResponse.json();
+
+        updateWeather(weatherData);
+        renderHours(forecastData.list);
+      }
+
+      async function fetchWeatherByCity(city) {
+        const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&lang=es&appid=${API_KEY}`;
+        const weatherResponse = await fetch(weatherUrl);
+        if (!weatherResponse.ok) throw new Error('Ciudad no encontrada.');
+        const weatherData = await weatherResponse.json();
+
+        const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&units=metric&lang=es&appid=${API_KEY}`;
+        const forecastResponse = await fetch(forecastUrl);
+        if (!forecastResponse.ok) throw new Error('No se pudo obtener el pronóstico.');
+        const forecastData = await forecastResponse.json();
+
+        updateWeather(weatherData);
+        renderHours(forecastData.list);
+      }
+
+      async function loadWeather() {
+        refreshBtn.disabled = true;
+        try {
+          if (navigator.geolocation) {
+            const position = await new Promise((resolve, reject) => {
+              navigator.geolocation.getCurrentPosition(resolve, reject, {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 600000
+              });
+            });
+
+            await fetchWeatherByCoords(position.coords.latitude, position.coords.longitude);
+            return;
+          }
+
+          await fetchWeatherByCity(DEFAULT_CITY);
+        } catch (error) {
+          await fetchWeatherByCity(DEFAULT_CITY);
+        } finally {
+          refreshBtn.disabled = false;
+        }
+      }
+
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'es-ES';
+        recognition.interimResults = true;
+        recognition.continuous = false;
+
+        recognition.onresult = async (event) => {
+          const interimText = Array.from(event.results)
+            .map(result => result[0].transcript)
+            .join(' ');
+
+          voiceOutput.textContent = interimText;
+
+          const finalText = Array.from(event.results)
+            .filter(result => result.isFinal)
+            .map(result => result[0].transcript)
+            .join(' ')
+            .trim();
+
+          if (finalText) {
+            await applyVoiceCommand(finalText);
+          }
+        };
+
+        recognition.onerror = () => {
+          voiceOutput.textContent = 'No se pudo reconocer el audio. Intenta de nuevo.';
+          voiceBtn.textContent = 'Escuchar';
+        };
+
+        recognition.onend = () => {
+          voiceBtn.textContent = 'Escuchar';
+        };
+
+        voiceBtn.addEventListener('click', () => {
+          voiceBtn.textContent = 'Escuchando...';
+          voiceOutput.textContent = 'Escuchando...';
+          recognition.start();
+        });
+      } else {
+        voiceBtn.disabled = true;
+        voiceOutput.textContent = 'Tu navegador no soporta reconocimiento de voz.';
+      }
+
+      refreshBtn.addEventListener('click', loadWeather);
+      loadWeather();
+    </script>
+  </body>
+</html>
