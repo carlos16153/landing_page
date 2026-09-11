@@ -15,6 +15,7 @@ const stayButton = document.querySelector('#stay-button');
 const entryResponse = document.querySelector('#entry-response');
 const duelAudio = document.querySelector('#duel-audio');
 const accordionItems = document.querySelectorAll('.accordion-item');
+const voiceCommand = document.querySelector('#voice-command');
 
 document.body.classList.add('entry-locked');
 
@@ -60,10 +61,82 @@ scrollButtons.forEach((button) => {
   });
 });
 
-joinButton.addEventListener('click', () => {
+if (joinButton) {
+  joinButton.addEventListener('click', () => {
+    toast.classList.add('visible');
+    window.setTimeout(() => toast.classList.remove('visible'), 3600);
+  });
+}
+
+const normalizeVoiceText = (text) => text
+  .toLowerCase()
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '');
+
+const showVoiceMessage = (message) => {
+  toast.textContent = message;
   toast.classList.add('visible');
   window.setTimeout(() => toast.classList.remove('visible'), 3600);
-});
+};
+
+const runVoiceCommand = (command) => {
+  const normalizedCommand = normalizeVoiceText(command);
+  const destinations = [
+    { keywords: ['arsenal', 'deck', 'cartas'], target: '#arsenal', label: 'el arsenal' },
+    { keywords: ['exodia', 'sello', 'faraon'], target: '#exodia', label: 'el sello de Exodia' },
+    { keywords: ['academia', 'historia'], target: '#academy', label: 'la academia' },
+    { keywords: ['torneo', 'torneos', 'evento', 'eventos'], target: '#events', label: 'los torneos' },
+    { keywords: ['inicio', 'arriba', 'comienzo'], target: '#top', label: 'el inicio' }
+  ];
+  const destination = destinations.find(({ keywords }) => keywords.some((keyword) => normalizedCommand.includes(keyword)));
+
+  if (normalizedCommand.includes('entrar') || normalizedCommand.includes('duelo')) {
+    enterButton.click();
+    showVoiceMessage('Comando: entrando al duelo.');
+    return;
+  }
+
+  if (destination) {
+    document.querySelector(destination.target)?.scrollIntoView({ behavior: 'smooth' });
+    showVoiceMessage(`Comando: mostrando ${destination.label}.`);
+    return;
+  }
+
+  showVoiceMessage(`No reconocí el comando: “${command}”.`);
+};
+
+if (voiceCommand) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    voiceCommand.disabled = true;
+    voiceCommand.title = 'Tu navegador no admite comandos de voz';
+    voiceCommand.setAttribute('aria-label', 'Comandos de voz no disponibles');
+  } else {
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'es-ES';
+    recognition.interimResults = false;
+    recognition.continuous = false;
+
+    recognition.onstart = () => {
+      voiceCommand.classList.add('is-listening');
+      voiceCommand.textContent = '...';
+      showVoiceMessage('Escuchando un comando.');
+    };
+
+    recognition.onresult = (event) => {
+      const command = event.results[0][0].transcript.trim();
+      runVoiceCommand(command);
+    };
+
+    recognition.onerror = () => showVoiceMessage('No se pudo reconocer el comando de voz.');
+    recognition.onend = () => {
+      voiceCommand.classList.remove('is-listening');
+      voiceCommand.textContent = 'MIC';
+    };
+    voiceCommand.addEventListener('click', () => recognition.start());
+  }
+}
 
 const closeCardModal = () => {
   cardModal.hidden = true;
